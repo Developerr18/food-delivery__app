@@ -4,22 +4,26 @@ import fs from "fs";
 /////////////////////////////////////////////////////
 // Add Food Item
 const addFood = async (req, res) => {
-  const image_filename = `${req.file.filename}`;
-
-  const newFood = new FoodModel({
-    name: req.body.name,
-    description: req.body.description,
-    price: req.body.price,
-    category: req.body.category,
-    image: image_filename,
-  });
-
   try {
+    if (!req.file) {
+      return res.json({ success: false, message: "Image file is required" });
+    }
+
+    const image_filename = `${req.file.filename}`;
+
+    const newFood = new FoodModel({
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+      category: req.body.category,
+      image: image_filename,
+    });
+
     await newFood.save();
-    res.json({ success: true, message: "new Food Added" });
+    res.json({ success: true, message: "New Food Added" });
   } catch (err) {
-    console.log(err);
-    res.json({ success: false, message: "Error" });
+    console.log("Error adding food:", err);
+    res.json({ success: false, message: err.message || "Error adding food" });
   }
 };
 

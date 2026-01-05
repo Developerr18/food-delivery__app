@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import fs from "fs";
 import { connectDB } from "./config/db.js";
 import foodRouter from "./routes/foodRoute.js";
 import userRouter from "./routes/userRoute.js";
@@ -9,6 +10,11 @@ import orderRouter from "./routes/orderRoute.js";
 
 // app config
 const app = express();
+
+// Ensure uploads folder exists
+if (!fs.existsSync("uploads")) {
+  fs.mkdirSync("uploads");
+}
 const PORT = process.env.PORT || 4000;
 
 // middleware
